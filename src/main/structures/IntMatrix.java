@@ -1,4 +1,4 @@
-package main;
+package main.structures;
 
 public class IntMatrix {
 
@@ -122,5 +122,4 @@ public class IntMatrix {
         }
         return b.toString();
     }
-
 }

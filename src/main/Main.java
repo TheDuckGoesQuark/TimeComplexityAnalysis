@@ -1,6 +1,7 @@
 package main;
 
 import main.algorithms.BasicMultiplier;
+import main.structures.IntMatrix;
 import main.timeTests.ResultsExporter;
 import main.timeTests.TestDetails;
 

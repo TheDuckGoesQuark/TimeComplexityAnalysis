@@ -1,8 +1,8 @@
 package main.algorithms;
 
-import main.IntMatrix;
+import main.structures.IntMatrix;
 
-public class BasicMultiplier {
+public class BasicMultiplier extends BaseMultiplier<IntMatrix> {
 
     public String toString() {
         return "BasicMultiplier";

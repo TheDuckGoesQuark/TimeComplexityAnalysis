@@ -1,9 +1,11 @@
 package main;
 
+import main.structures.IntMatrix;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SampleGenerator {
-    private static final int MAX_DIMENSION = 5000;
+    private static final int MAX_DIMENSION = 1000;
     private static final int MAX_VALUE = 1000;
     private static final int MIN_VALUE = -1000;
 
