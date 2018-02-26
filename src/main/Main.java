@@ -66,15 +66,15 @@ public class Main {
     }
 
     private static void saveResults(String filename, ResultsExporter results, int runNumber) {
-        boolean successful = true;
+        boolean successful = false;
         String fileNameExt = filename + runNumber + ".csv";
         try {
             results.saveToCSV(fileNameExt);
         } catch (FileAlreadyExistsException e) {
             saveResults(filename, results, runNumber + 1);
+            successful = true;
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            successful = false;
         }
         if (successful) {
             System.out.println("File " + fileNameExt + " saved successfully.");
