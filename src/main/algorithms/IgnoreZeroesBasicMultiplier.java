@@ -2,11 +2,11 @@ package main.algorithms;
 
 import main.structures.IntMatrix;
 
-public class BasicMultiplier extends BaseMultiplier<IntMatrix> {
+public class IgnoreZeroesBasicMultiplier extends BaseMultiplier<IntMatrix> {
 
     @Override
     public String toString() {
-        return "BasicMultiplier";
+        return "IgnoreZeroesBasicMultiplier";
     }
 
     @Override
@@ -16,15 +16,14 @@ public class BasicMultiplier extends BaseMultiplier<IntMatrix> {
 
         for(int i = 0; i < dim; i++) {
             for(int j = 0; j < dim; j++) {
-                int sum = 0;
-                for(int k = 0; k < dim; k++) {
-                    sum += a.get(i,k) * b.get(k,j);
+                if (a.get(i, j) != 0) { // dont perform operations on zeroed elements
+                    for (int k = 0; k < dim; k++) {
+                        result.set(i,k, result.get(i,k) + (a.get(i, j) * b.get(j, k)));
+                    }
                 }
-                result.set(i,j,sum);
             }
         }
 
         return result;
     }
-
 }

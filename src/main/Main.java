@@ -1,8 +1,10 @@
 package main;
 
 import main.algorithms.BasicMultiplier;
+import main.algorithms.IgnoreZeroesBasicMultiplier;
 import main.structures.IntMatrix;
 import main.timeTests.ResultsExporter;
+import main.timeTests.SampleGenerator;
 import main.timeTests.TestDetails;
 
 import java.io.IOException;
@@ -13,66 +15,70 @@ public class Main {
     private static final int NUMBER_OF_RUNS_TO_AVERAGE = 3;
     private static final int NUMBER_OF_TESTS = 100;
 
-    private static final ResultsExporter basicMultiplierExporter = new ResultsExporter("BasicMultiplier");
+    private static final ResultsExporter resultsExporter = new ResultsExporter();
     private static final BasicMultiplier basicMultiplier = new BasicMultiplier();
+    private static final IgnoreZeroesBasicMultiplier ignoreZeroesBasicMultiplier = new IgnoreZeroesBasicMultiplier();
 
     public static void main(String[] args) {
-
         for (int i = 0; i < NUMBER_OF_TESTS; i++) {
-            long loopTimer = System.nanoTime();
             // Gives an idea of test progress.
+            long loopTimer = System.nanoTime();
             System.out.println(i);
-
-            // Creates  random list of samples to run through, and sorted version for comparison
-            IntMatrix a = SampleGenerator.createZeroedMatrixSample();
-            IntMatrix b = SampleGenerator.createZeroedMatrixSample(a.getDim());
+            IntMatrix a = SampleGenerator.createSparseMatrix();
+            IntMatrix b = SampleGenerator.createSparseMatrix(a.getDim());
+            System.out.println("Dimensions: "+a.getDim());
+            //runTests(a, b);
             runTests(a, b);
-
             System.out.println("TOTAL TIMES: " + (System.nanoTime() - loopTimer) / 1000000000L + " seconds");
         }
-        saveResults(basicMultiplierExporter, 0);
+
+        if (args.length > 0) saveResults(args[0], resultsExporter, 0);
+        else saveResults("Tests", resultsExporter, 0);
+
     }
 
     private static void runTests(IntMatrix a, IntMatrix b) {
         // Runs random tests
         long basicMultiplierTime = 0L;
+        long ignoreZerosMultiplierTime = 0L;
 
         for (int j = 0; j < NUMBER_OF_RUNS_TO_AVERAGE; j++) {
             basicMultiplierTime += timeBasicMultiplication(a, b);
+            ignoreZerosMultiplierTime += timeIgnoreZeroesBasicMultiplication(a,b);
         }
 
+        double densityOfA = SampleGenerator.getDensity(a);
+        double densityOfB = SampleGenerator.getDensity(b);
+
         // Creates TestDetails instance for tests
-        basicMultiplierExporter.addTest(new TestDetails(
-                "BasicMultiplier",
+        resultsExporter.addTest(new TestDetails(
+                basicMultiplier.toString(),
                 a.getDim(),
-                (basicMultiplierTime / NUMBER_OF_RUNS_TO_AVERAGE)
+                SampleGenerator.RANDOM_SPARSE,
+                densityOfA, densityOfB, (basicMultiplierTime / NUMBER_OF_RUNS_TO_AVERAGE)
+        ));
+        resultsExporter.addTest(new TestDetails(
+                ignoreZeroesBasicMultiplier.toString(),
+                a.getDim(),
+                SampleGenerator.RANDOM_SPARSE,
+                densityOfA, densityOfB, (ignoreZerosMultiplierTime / NUMBER_OF_RUNS_TO_AVERAGE)
         ));
     }
 
-    private static void saveResults(ResultsExporter results, int runNumber) {
+    private static void saveResults(String filename, ResultsExporter results, int runNumber) {
         boolean successful = true;
-        String fileName = results.getAlgorithmName() + runNumber + ".csv";
+        String fileNameExt = filename + runNumber + ".csv";
         try {
-            results.saveToCSV(fileName);
+            results.saveToCSV(fileNameExt);
         } catch (FileAlreadyExistsException e) {
-            saveResults(results, runNumber + 1);
+            saveResults(filename, results, runNumber + 1);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             successful = false;
         }
         if (successful) {
-            System.out.println("File " + fileName + " saved successfully.");
+            System.out.println("File " + fileNameExt + " saved successfully.");
         }
-    }
-
-    private static IntMatrix deepCopyIntMatrix(IntMatrix original) {
-        IntMatrix copy = new IntMatrix(original.getDim());
-        for (int i = 0; i < original.getDim(); i++) {
-            for (int j = 0; j < original.getDim(); j++) {
-                copy.set(i, j, original.get(i, j));
-            }
-        }
-        return copy;
     }
 
     private static long timeBasicMultiplication(IntMatrix a, IntMatrix b) {
@@ -82,5 +88,10 @@ public class Main {
         return (endTime - startTime);
     }
 
-
+    private static long timeIgnoreZeroesBasicMultiplication(IntMatrix a, IntMatrix b) {
+        long startTime = System.nanoTime();
+        ignoreZeroesBasicMultiplier.multiply(a, b);
+        long endTime = System.nanoTime();
+        return (endTime - startTime);
+    }
 }

@@ -11,13 +11,10 @@ import java.util.ArrayList;
  * This class contains methods for exporting test results to persistent files, such as csv
  */
 public class ResultsExporter {
-    private static final String[] CSVHEADINGS = {"Algorithm Name", "Dimensions", "Total Time Elapsed"};
-    private String algorithmName;
+    private static final String[] CSVHEADINGS = {"Algorithm Name", "Dimensions", "Matrix Type", "Density of A", "Density of B", "Total Time Elapsed"};
     private ArrayList<TestDetails> listOfTests = new ArrayList<>();
 
-    public ResultsExporter(String algorithmName) {
-        this.algorithmName = algorithmName;
-    }
+    public ResultsExporter() { }
 
     public void addTest(TestDetails test) {
         listOfTests.add(test);
@@ -52,6 +49,12 @@ public class ResultsExporter {
                 sb.append(",");
                 sb.append(test.getDimensions());
                 sb.append(",");
+                sb.append(test.getMatrixType());
+                sb.append(",");
+                sb.append(test.getDensityOfA());
+                sb.append(",");
+                sb.append(test.getDensityOfB());
+                sb.append(",");
                 sb.append(test.getTotalTime());
                 sb.append("\n");
                 writer.write(sb.toString());
@@ -63,9 +66,5 @@ public class ResultsExporter {
         } finally {
             if (writer != null) writer.close();
         }
-    }
-
-    public String getAlgorithmName() {
-        return algorithmName;
     }
 }

@@ -2,7 +2,7 @@ package main.structures;
 
 public class IntMatrix {
 
-    private int [][] values;
+    private int[][] values;
 
     /**
      * Creates a square matrix with the given dimension.
@@ -12,7 +12,7 @@ public class IntMatrix {
     }
 
     /**
-     * Creates a matrix containing the given values. 
+     * Creates a matrix containing the given values.
      */
     public IntMatrix(int[][] values) {
         this.values = values;
@@ -45,6 +45,7 @@ public class IntMatrix {
     public int get(int i, int j) {
         return values[i][j];
     }
+
     /**
      * Return a (square) slice of the matrix, starting from
      * the given coordinates with the given dimension.
@@ -53,7 +54,7 @@ public class IntMatrix {
         int[][] values = new int[dim][dim];
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
-                values[i][j] = this.values[x+i][y+j];
+                values[i][j] = this.values[x + i][y + j];
             }
         }
         return new IntMatrix(values);
@@ -67,7 +68,7 @@ public class IntMatrix {
         int dim = m.getDim();
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
-                this.set(x+i, y+j, m.get(i,j));
+                this.set(x + i, y + j, m.get(i, j));
             }
         }
     }
@@ -81,9 +82,9 @@ public class IntMatrix {
 
         IntMatrix c = new IntMatrix(dim);
 
-        for(int i = 0; i < dim; i++) {
-            for(int j = 0; j < dim; j++) {
-                c.set(i, j, a.get(i,j) + b.get(i,j));
+        for (int i = 0; i < dim; i++) {
+            for (int j = 0; j < dim; j++) {
+                c.set(i, j, a.get(i, j) + b.get(i, j));
             }
         }
 
@@ -98,9 +99,9 @@ public class IntMatrix {
 
         IntMatrix c = new IntMatrix(dim);
 
-        for(int i = 0; i < dim; i++) {
-            for(int j = 0; j < dim; j++) {
-                c.set(i, j, a.get(i,j) - b.get(i,j));
+        for (int i = 0; i < dim; i++) {
+            for (int j = 0; j < dim; j++) {
+                c.set(i, j, a.get(i, j) - b.get(i, j));
             }
         }
 
@@ -121,5 +122,20 @@ public class IntMatrix {
             b.append("\n");
         }
         return b.toString();
+    }
+
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof IntMatrix)) return false;
+        IntMatrix other = (IntMatrix) o;
+        if (this.getDim() != other.getDim()) return false;
+
+        for (int i = 0; i < this.getDim(); i++) {
+            for (int j = 0; j < this.getDim(); j++) {
+                if (this.get(i, j) != other.get(i, j)) return false;
+            }
+        }
+
+        return true;
     }
 }
