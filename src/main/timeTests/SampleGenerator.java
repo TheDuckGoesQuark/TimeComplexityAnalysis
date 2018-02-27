@@ -54,8 +54,14 @@ public class SampleGenerator {
     }
 
     public static IntMatrix createSparseMatrix(int dim) {
+        int nonZeroes = generateRandomPositiveInteger(dim * dim);
+        double density = ((double) nonZeroes) / ((double) dim * dim);
+        return createSparseMatrixWithDensity(dim, density);
+    }
+
+    public static IntMatrix createSparseMatrixWithDensity(int dim, double density) {
         IntMatrix intMatrix = createRandomMatrixSample(dim);
-        int nZeroes = generateRandomPositiveInteger(dim * dim);
+        int nZeroes = (int) ((1.0 - density) * ((double) (dim * dim)));
 
         // Generate random matrix indices
         Set<Point> set = new HashSet<>();
