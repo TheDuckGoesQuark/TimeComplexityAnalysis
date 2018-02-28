@@ -13,8 +13,10 @@ public class SampleGenerator {
     private static final int MIN_VALUE = -1000;
 
     public static final String RANDOM_SPARSE = "Random Sparse";
+    public static final String CONTROLLED_SPARSE = "Controlled Sparse";
     public static final String RANDOM = "Random";
     public static final String ZEROED = "Zeroed";
+    public static final String RANDOM_POWER_OF_TWO = "Random Power of Two";
 
     public static IntMatrix createZeroedMatrixSample() {
         int dim = generateRandomDimension();
@@ -32,12 +34,17 @@ public class SampleGenerator {
         return intMatrix;
     }
 
-    static IntMatrix createRandomMatrixSample() {
+    public static IntMatrix createRandomMatrixSample() {
         int dim = generateRandomDimension();
         return createRandomMatrixSample(dim);
     }
 
-    static IntMatrix createRandomMatrixSample(int dim) {
+    public static IntMatrix createRandomMatrixSampleDimPowerOfTwo() {
+        int dim = generateRandomPowerOfTwo();
+        return createRandomMatrixSample(dim);
+    }
+
+    public static IntMatrix createRandomMatrixSample(int dim) {
         IntMatrix intMatrix = new IntMatrix(dim);
 
         for (int i = 0; i < dim; i++) {
@@ -104,6 +111,10 @@ public class SampleGenerator {
 
     private static int generateRandomPositiveInteger(int upperBound) {
         return ThreadLocalRandom.current().nextInt(0, upperBound);
+    }
+
+    private static int generateRandomPowerOfTwo() {
+        return (int) Math.pow(2, ThreadLocalRandom.current().nextInt(1, 12));
     }
 
 }
